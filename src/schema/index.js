@@ -1,4 +1,11 @@
-const {GraphQLObjectType, GraphQLString, GraphQLSchema} = require('graphql');
+const {
+  GraphQLObjectType,
+  GraphQLString,
+  GraphQLBoolean,
+  GraphQLSchema,
+  GraphQLInputObjectType,
+  GraphQLNonNull
+} = require('graphql');
 const {PubSub} = require('graphql-subscriptions');
 
 const PubSubService   =  new PubSub();
@@ -14,20 +21,40 @@ const fakeDatabase = {
   },
 };
 
-
-const userType = new GraphQLObjectType({
+const UserModel = new GraphQLObjectType({
   name: 'User',
-  fields: {
-    id: { type: GraphQLString },
-    name: { type: GraphQLString },
-  }
+  args:{},
+  fields: ()=> ({
+    input: {
+      type: UserModel
+    }
+  })
+});
+
+
+const UserInput = new GraphQLInputObjectType({
+  name: 'UserInput',
+  fields: ()=>({
+    username: { type: new GraphQLNonNull(GraphQLString) },
+    age: { type: new GraphQLNonNull(GraphQLString) },
+    gender: { type: new GraphQLNonNull(GraphQLString) },
+  })
+});
+
+const UserSubscriptionInput = new GraphQLInputObjectType({
+  name: 'UserSubscriptionInput',
+  fields: ()=>({
+    create: { type: new GraphQLNonNull(GraphQLBoolean) },
+    update: { type: new GraphQLNonNull(GraphQLBoolean) },
+    remove: { type: new GraphQLNonNull(GraphQLBoolean) },
+  })
 });
 
 const queries = new GraphQLObjectType({
   name: 'Query',
   fields: {
-    user: {
-      type: userType,
+    User: {
+      type: UserModel,
       args: {
         id: {type: GraphQLString}
       },
@@ -41,8 +68,8 @@ const queries = new GraphQLObjectType({
 const mutations = new GraphQLObjectType({
   name: 'Mutation',
   fields: {
-    user: {
-      type: userType,
+    User: {
+      type: UserModel,
       args: {
         id: {type: GraphQLString}
       },
@@ -54,24 +81,30 @@ const mutations = new GraphQLObjectType({
   }
 });
 
+const outputType = new GraphQLObjectType({
+  name: `UserSubscriptionOutput`,
+  fields: () => Object.assign(
+    {},
+    { User: { type: UserModel } },
+    { clientSubscriptionId: { type: GraphQLString } },
+  ),
+});
+
 const subscriptions = new GraphQLObjectType({
   name: 'Subscription',
   fields: {
-    user: {
-      type: userType,
+    User: {
+      type: outputType,
       args: {
-        id: {type: GraphQLString}
+        input: { type: UserSubscriptionInput },
       },
       resolve(obj, { input }, context, info) {
-        return 'You are subscribed';
-      }
+        return obj;
+      },
+      subscribe: () => PubSubService.asyncIterator('User'),
     }
   },
-  User: {
-    subscribe: () => PubSubService.asyncIterator('User'),
-  }
 });
-
 
 const schema = new GraphQLSchema({query: queries, mutation: mutations, subscription: subscriptions});
 
