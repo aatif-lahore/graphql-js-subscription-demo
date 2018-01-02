@@ -8,6 +8,7 @@ const {
 } = require('graphql');
 // const {PubSub} = require('graphql-subscriptions');
 const {LoopbackPubSub} = require('graphql-loopback-subscriptions');
+const { withFilter } = require('graphql-subscriptions');
 
 const PubSubService = new LoopbackPubSub();
 
@@ -96,16 +97,17 @@ const subscriptions = new GraphQLObjectType({
       resolve (dataReceived, { input }, context, info) {
         // here the object dataReceived will get data from mutation
         const op = {
-          outputOfSubscription: {
-            firstName: dataReceived.firstName,
-            lastName: dataReceived.lastName
-          },
+          outputOfSubscription: dataReceived,
           clientSubscriptionId: '123'
         };
 
         return op;
       },
-      subscribe: () => PubSubService.asyncIterator('THIS-SHOULD-MATCH')
+
+      subscribe: withFilter(() => PubSubService.asyncIterator('THIS-SHOULD-MATCH'), (payload, variables) => {
+        console.log('In the subscribe function')
+        return true;
+      }),
     }
   }
 });
