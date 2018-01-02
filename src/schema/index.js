@@ -6,9 +6,10 @@ const {
   GraphQLInputObjectType,
   GraphQLNonNull
 } = require('graphql');
-const {PubSub} = require('graphql-subscriptions');
+// const {PubSub} = require('graphql-subscriptions');
+const {LoopbackPubSub} = require('graphql-loopback-subscriptions');
 
-const PubSubService = new PubSub();
+const PubSubService = new LoopbackPubSub();
 
 const fakeDatabase = {
   'a': {
