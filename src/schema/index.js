@@ -7,10 +7,10 @@ const {
   GraphQLNonNull
 } = require('graphql');
 // const {PubSub} = require('graphql-subscriptions');
-const {LoopbackPubSub} = require('graphql-loopback-subscriptions');
+const {PubSub} = require('graphql-subscriptions');
 const { withFilter } = require('graphql-subscriptions');
 
-const PubSubService = new LoopbackPubSub();
+const PubSubService = new PubSub();
 
 const fakeDatabase = {
   'a': {

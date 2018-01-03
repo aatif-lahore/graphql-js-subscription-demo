@@ -1,5 +1,5 @@
 {
-  "name": "graphql-js",
+  "name": "graphql-js-dynamic",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -15,9 +15,9 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/howtographql/graphql-js/issues"
+    "url": "https://github.com/aatifhussain/graphql-js-subscription-demo/issues"
   },
-  "homepage": "https://github.com/howtographql/graphql-js#readme",
+  "homepage": "https://github.com/aatifhussain/graphql-js-subscription-demo",
   "dependencies": {
     "apollo-server-express": "^1.3.2",
     "body-parser": "^1.18.2",
@@ -26,7 +26,6 @@
     "express-graphql": "^0.6.11",
     "graphql": "^0.12.3",
     "graphql-subscriptions": "^0.5.6",
-    "graphql-loopback-subscriptions": "git+https://git@github.com/aatifhussain/graphql-loopback-subscriptions.git#master",
     "graphql-tools": "^2.14.1",
     "mongodb": "^3.0.1",
     "subscriptions-transport-ws": "^0.9.4"

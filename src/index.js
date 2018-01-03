@@ -1,10 +1,6 @@
 const express = require('express')
 
-// This package automatically parses JSON requests.
 const bodyParser = require('body-parser')
-
-// This package will handle GraphQL server requests and responses
-// for you, based on your schema.
 const {graphqlExpress, graphiqlExpress} = require('apollo-server-express')
 const graphqlHTTP = require('express-graphql')
 const {execute, subscribe} = require('graphql')
@@ -33,7 +29,7 @@ const start = async () => {
       {execute, subscribe, schema},
       {server, path: '/subscriptions'}
     )
-    console.log(`Hackernews GraphQL server running on port ${PORT}.`)
+    console.log(`GraphQL server running on port ${PORT}.`)
   })
 }
 
